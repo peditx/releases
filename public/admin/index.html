@@ -6,11 +6,46 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- 
-    By placing the script at the end of the body, we ensure the HTML document is fully loaded 
-    before the script tries to add elements to it. This resolves the 'appendChild' error.
-  -->
+  <!-- Decap CMS will attach itself to this element -->
+  <div id="nc-root"></div>
+
+  <!-- Load the Decap CMS script -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <!--
+    Initialize the CMS directly with our configuration object.
+    This is the most reliable method and avoids all issues with fetching a separate config.yml file.
+  -->
+  <script>
+    var config = {
+      backend: {
+        name: 'github',
+        repo: 'peditx/releases',
+        branch: 'main',
+      },
+      media_folder: 'src/assets/images/uploads',
+      public_folder: '/assets/images/uploads',
+      collections: [
+        {
+          name: 'releases',
+          label: 'Releases',
+          folder: 'src/content/releases',
+          create: true,
+          slug: '{{slug}}',
+          fields: [
+            { label: 'Title', name: 'title', widget: 'string' },
+            { label: 'Description', name: 'description', widget: 'string' },
+            { label: 'Publish Date', name: 'pubDate', widget: 'datetime' },
+            { label: 'Hero Image', name: 'heroImage', widget: 'image' },
+            { label: 'Script File URL', name: 'scriptUrl', widget: 'string' },
+            { label: 'Body', name: 'body', widget: 'markdown' },
+          ],
+        },
+      ],
+    };
+
+    CMS.init({ config });
+  </script>
 </body>
 </html>
 
