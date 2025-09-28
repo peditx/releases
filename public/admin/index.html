@@ -6,15 +6,11 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- Decap CMS will automatically find and mount itself to this div -->
   <div id="nc-root"></div>
 
   <script>
-    // This is the crucial part. We are defining the configuration object
-    // globally BEFORE the Decap CMS script is loaded. When the script
-    // loads, it will find this global config and use it automatically,
-    // preventing any need to fetch an external config.yml or redirect to Netlify.
-    window.CMS_CONFIG = {
+    // Step 1: Define the configuration object
+    const config = {
       backend: {
         name: 'github',
         repo: 'peditx/releases',
@@ -42,9 +38,16 @@
         },
       ],
     };
+
+    // Step 2: Assign it to the global window object so the CMS can find it
+    window.CMS_CONFIG = config;
+
+    // Step 3: VERY IMPORTANT - Log to the console to verify this script is running
+    console.log("CMS Config has been defined. If you see this, the correct index.html is loaded.");
+    console.log("App ID being used:", window.CMS_CONFIG.backend.app_id);
   </script>
 
-  <!-- Load the Decap CMS script AFTER the config is defined -->
+  <!-- Step 4: Load the Decap CMS script itself -->
   <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
 </body>
 </html>
