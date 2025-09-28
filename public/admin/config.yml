@@ -2,6 +2,8 @@ backend:
   name: github
   repo: peditx/releases # IMPORTANT: Your GitHub username and repository name
   branch: main # The branch to update
+  auth_type: implicit
+  app_id: Ov23lifHcrzFtVm5F3Zl
 
 # Corrected paths for media files
 media_folder: "public/images/uploads" # Media files will be stored in this directory
