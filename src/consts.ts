@@ -1,5 +1,3 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
-
-export const SITE_TITLE = 'Astro Blog';
-export const SITE_DESCRIPTION = 'Welcome to my website!';
+// In this file, you can define global constants for your site.
+export const SITE_TITLE = 'PeDitXOS Releases';
+export const SITE_DESCRIPTION = 'The latest updates and versions from PeDitXOS.';
