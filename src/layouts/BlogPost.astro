@@ -1,86 +1,61 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Layout from './Layout.astro';
+import { Image } from 'astro:assets';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'releases'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, heroImage, scriptUrl } = Astro.props;
+
+const installCommand = `sh -c "$(curl -sL '${scriptUrl}')"`;
 ---
+<Layout title={title} description={description}>
+	<article class="prose dark:prose-invert max-w-none">
+		<Image
+			width={1020}
+			height={510}
+			src={heroImage}
+			alt={`Hero image for ${title}`}
+			class="rounded-lg mb-4"
+		/>
+		<h1>{title}</h1>
+		<p class="text-zinc-500 dark:text-zinc-400">
+			Published on {new Date(pubDate).toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			})}
+		</p>
+		<hr />
+		<slot /> <!-- The content of your markdown file will be rendered here -->
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+		<!-- Install/Download Box -->
+		<div class="mt-12 not-prose">
+			<h3 class="text-2xl font-bold text-zinc-800 dark:text-zinc-100 mb-2">Install / Download</h3>
+			<div class="bg-zinc-200 dark:bg-zinc-800 p-4 rounded-md relative text-lg font-mono text-green-600 dark:text-green-400">
+				<pre class="m-0 p-0 bg-transparent whitespace-pre-wrap break-all"><code>{installCommand}</code></pre>
+				<button id="copy-button" class="absolute top-3 right-3 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors" title="Copy command">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+				</button>
+			</div>
+		</div>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+	</article>
+</Layout>
+
+<script define:vars={{ installCommand }}>
+	const copyButton = document.getElementById('copy-button');
+	const originalIcon = copyButton.innerHTML;
+	const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+	copyButton.addEventListener('click', () => {
+		navigator.clipboard.writeText(installCommand).then(() => {
+			copyButton.innerHTML = checkIcon;
+			setTimeout(() => {
+				copyButton.innerHTML = originalIcon;
+			}, 2000);
+		}).catch(err => {
+			console.error('Failed to copy command: ', err);
+		});
+	});
+</script>
