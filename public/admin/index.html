@@ -6,10 +6,15 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- This div is the dedicated container for the Decap CMS app -->
+  <div id="nc-root"></div>
+
+  <!-- We load the script *after* the container div exists -->
+  <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
   <script>
-    // By embedding the config directly, we avoid all loading and timing issues.
-    // The CMS will initialize with this exact configuration.
+    // This log confirms the script is running
+    console.log("Initializing Decap CMS with embedded config...");
+
     window.CMS.init({
       config: {
         backend: {
