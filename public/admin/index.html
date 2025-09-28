@@ -4,21 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <style>
-    /* A simple loader to show that the page is working before the CMS loads */
-    body::before {
-      content: 'Loading Content Manager...';
-      display: block;
-      text-align: center;
-      padding: 40px;
-      font-family: sans-serif;
-      color: #777;
-    }
-  </style>
 </head>
 <body>
-  <!-- This file now only loads the script. The config is in a separate file. -->
+  <!-- By placing the script tag at the end of the body, we ensure the <body> element exists before the script runs. -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
 
