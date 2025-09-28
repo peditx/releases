@@ -1,15 +1,43 @@
 ---
-// This file is intentionally empty. The redirect happens in the HTML below.
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const posts = (await getCollection('releases')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="refresh" content="0;url=/releases" />
-		<title>Redirecting...</title>
-	</head>
-	<body>
-		<p>If you are not redirected automatically, follow this <a href="/releases">link to the releases page</a>.</p>
-	</body>
-</html>
+
+<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<main>
+		<section>
+			<ul>
+				{
+					posts.map((post) => (
+						<li>
+							<a href={`/releases/${post.slug}/`}>
+								<img
+									width={720}
+									height={360}
+									src={post.data.heroImage}
+									alt=""
+								/>
+								<h4 class="title">{post.data.title}</h4>
+								<p class="date">
+									<time datetime={post.data.pubDate.toISOString()}>
+										{post.data.pubDate.toLocaleDateString('en-us', {
+											year: 'numeric',
+											month: 'short',
+											day: 'numeric',
+										})}
+									</time>
+								</p>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</main>
+</Layout>
 
