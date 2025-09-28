@@ -1,0 +1,22 @@
+backend:
+  name: github # Use GitHub for authentication
+  repo: peditx/releases # The path to your repository on GitHub
+  branch: main # The branch to update
+
+media_folder: "src/assets/images/uploads" # Path to store uploaded images
+public_folder: "/assets/images/uploads" # Public path for displaying images
+
+collections:
+  - name: "releases"
+    label: "Releases"
+    folder: "src/content/releases" # Path to store the markdown files
+    create: true
+    slug: "{{slug}}" # Creates cleaner URLs like /releases/my-post-title
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Hero Image", name: "heroImage", widget: "image" }
+      - { label: "Script File URL", name: "scriptUrl", widget: "string", hint: "Enter the full raw URL for the script file (e.g., from GitHub Raw)." }
+      - { label: "Body", name: "body", widget: "markdown" }
+
