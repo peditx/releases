@@ -1,5 +1,15 @@
 ---
-// This file redirects the root path ("/") to the "/releases" page.
-return Astro.redirect('/releases');
+// This file is intentionally empty. The redirect happens in the HTML below.
 ---
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="refresh" content="0;url=/releases" />
+		<title>Redirecting...</title>
+	</head>
+	<body>
+		<p>If you are not redirected automatically, follow this <a href="/releases">link to the releases page</a>.</p>
+	</body>
+</html>
 
