@@ -6,8 +6,46 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- By placing the script tag at the end of the body, we ensure the <body> element exists before the script runs. -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Decap CMS will automatically find and mount itself to this div -->
+  <div id="nc-root"></div>
+
+  <script>
+    // This is the crucial part. We are defining the configuration object
+    // globally BEFORE the Decap CMS script is loaded. When the script
+    // loads, it will find this global config and use it automatically,
+    // preventing any need to fetch an external config.yml or redirect to Netlify.
+    window.CMS_CONFIG = {
+      backend: {
+        name: 'github',
+        repo: 'peditx/releases',
+        branch: 'main',
+        auth_type: 'implicit',
+        app_id: 'Ov23lifHcrzFtVm5F3Zl', // Your GitHub OAuth App Client ID
+      },
+      media_folder: 'public/images/uploads',
+      public_folder: '/images/uploads',
+      collections: [
+        {
+          name: 'releases',
+          label: 'Releases',
+          folder: 'src/content/releases',
+          create: true,
+          slug: '{{slug}}',
+          fields: [
+            { label: 'Title', name: 'title', widget: 'string' },
+            { label: 'Description', name: 'description', widget: 'string' },
+            { label: 'Publish Date', name: 'pubDate', widget: 'datetime' },
+            { label: 'Hero Image', name: 'heroImage', widget: 'image' },
+            { label: 'Script File URL', name: 'scriptUrl', widget: 'string' },
+            { label: 'Body', name: 'body', widget: 'markdown' },
+          ],
+        },
+      ],
+    };
+  </script>
+
+  <!-- Load the Decap CMS script AFTER the config is defined -->
+  <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
 </body>
 </html>
 
