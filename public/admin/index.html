@@ -6,12 +6,38 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- The Decap CMS script is loaded here -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // This line explicitly tells the CMS to initialize itself.
-    // This forces it to read your /admin/config.yml file and use the GitHub backend.
-    window.CMS.init();
+    // By embedding the config directly, we avoid all loading and timing issues.
+    // The CMS will initialize with this exact configuration.
+    window.CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'peditx/releases',
+          branch: 'main',
+        },
+        media_folder: "src/assets/images/uploads",
+        public_folder: "/assets/images/uploads",
+        collections: [
+          {
+            name: "releases",
+            label: "Releases",
+            folder: "src/content/releases",
+            create: true,
+            slug: "{{slug}}",
+            fields: [
+              { label: "Title", name: "title", widget: "string" },
+              { label: "Description", name: "description", widget: "string" },
+              { label: "Publish Date", name: "pubDate", widget: "datetime" },
+              { label: "Hero Image", name: "heroImage", widget: "image" },
+              { label: "Script File URL", name: "scriptUrl", widget: "string" },
+              { label: "Body", name: "body", widget: "markdown" },
+            ],
+          },
+        ],
+      },
+    });
   </script>
 </body>
 </html>
