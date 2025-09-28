@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('releases');
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+type Props = Awaited<ReturnType<typeof getStaticPaths>>[number]['props'];
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+const installCommand = `sh -c "$(curl -sL '${post.data.scriptUrl}')"`;
+---
+<Layout title={post.data.title}>
+	<article class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 max-w-4xl">
+		<div class="cyber-card p-8 md:p-12">
+			<header class="text-center mb-8">
+				<h1 class="text-4xl md:text-5xl font-black font-orbitron text-neon-cyan mb-4">{post.data.title}</h1>
+				<p class="text-gray-400">
+					{new Date(post.data.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+				</p>
+			</header>
+
+			<Image 
+                src={post.data.heroImage} 
+                alt={`Cover for ${post.data.title}`} 
+                width={1200}
+                height={600}
+                class="w-full rounded-lg mb-8 border-2 border-[var(--border-color)]"
+            />
+			
+			<div class="prose prose-invert prose-lg max-w-none text-gray-300 prose-headings:text-neon-magenta prose-headings:font-orbitron prose-a:text-neon-cyan hover:prose-a:text-neon-magenta">
+				<Content />
+			</div>
+
+			<div class="mt-12">
+				<h3 class="text-2xl font-orbitron text-neon-magenta mb-4">Install / Download</h3>
+				<div class="command-box p-4 rounded-md relative text-lg break-all">
+					<pre><code id="install-command">{installCommand}</code></pre>
+					<button id="copy-button" class="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors" title="Copy">
+						<i class="fas fa-copy"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<script define:vars={{ installCommand }}>
+	const copyButton = document.getElementById('copy-button');
+	copyButton.addEventListener('click', () => {
+		navigator.clipboard.writeText(installCommand).then(() => {
+			copyButton.innerHTML = '<i class="fas fa-check text-green-400"></i>';
+            copyButton.setAttribute('title', 'Copied!');
+			setTimeout(() => {
+				copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                copyButton.setAttribute('title', 'Copy');
+			}, 2000);
+		}).catch(err => {
+			console.error('Failed to copy: ', err);
+            copyButton.setAttribute('title', 'Error copying!');
+		});
+	});
+</script>
+<style is:global>
+.prose h1, .prose h2, .prose h3 { margin-bottom: 0.5em; }
+.prose p { margin-bottom: 1em; line-height: 1.7; }
+.prose ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 1em; }
+.prose a { text-decoration: underline; }
+</style>
+
