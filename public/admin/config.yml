@@ -1,18 +1,19 @@
 backend:
   name: github
-  repo: peditx/releases # Your repository
+  repo: peditx/releases # IMPORTANT: Your GitHub username and repository name
   branch: main # The branch to update
 
-media_folder: "src/assets/images/uploads" # Media files will be stored in this directory
-public_folder: "/assets/images/uploads" # The src attribute for uploaded media will begin with this path
+# Corrected paths for media files
+media_folder: "public/images/uploads" # Media files will be stored in this directory
+public_folder: "/images/uploads"     # The public URL for the media files will start with this path
 
 collections:
-  - name: "releases" # Used in routes, e.g., /admin/collections/releases
+  - name: "releases" # Used in routes, e.g., /releases/post-slug
     label: "Releases" # Used in the UI
-    folder: "src/content/releases" # The path to the directory where the documents are stored
+    folder: "src/content/releases" # The path to the folder where the documents are stored
     create: true # Allow users to create new documents in this collection
-    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
-    fields: # The fields for each document, usually in front matter
+    slug: "{{slug}}" # Filename template, e.g., title.md
+    fields: # The fields for each document, usually in frontmatter
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Description", name: "description", widget: "string"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime"}
