@@ -6,8 +6,13 @@
   <title>Content Manager</title>
 </head>
 <body>
-  <!-- The Decap CMS script is loaded here, after the body is created -->
+  <!-- The Decap CMS script is loaded here -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // This line explicitly tells the CMS to initialize itself.
+    // This forces it to read your /admin/config.yml file and use the GitHub backend.
+    window.CMS.init();
+  </script>
 </body>
 </html>
 
