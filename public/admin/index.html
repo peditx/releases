@@ -4,20 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
-</head>
-<body>
-  <!-- Decap CMS will attach itself to this element -->
-  <div id="nc-root"></div>
-
-  <!-- Load the Decap CMS script -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <!--
-    Initialize the CMS directly with our configuration object.
-    This is the most reliable method and avoids all issues with fetching a separate config.yml file.
+    STEP 1: Define the configuration object on the window.
+    This MUST happen before the main Decap CMS script is loaded.
   -->
   <script>
-    var config = {
+    window.CMS_CONFIG = {
       backend: {
         name: 'github',
         repo: 'peditx/releases',
@@ -43,9 +36,16 @@
         },
       ],
     };
-
-    CMS.init({ config });
   </script>
+
+  <!-- 
+    STEP 2: Load the Decap CMS script. It will automatically find 
+    window.CMS_CONFIG and use it, preventing any double-initialization errors.
+  -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</head>
+<body>
+  <!-- The CMS will be automatically mounted here by the script -->
 </body>
 </html>
 
