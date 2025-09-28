@@ -4,46 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
+  <!-- This script will automatically look for the config.yml file -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </head>
 <body>
-  <!-- This div is the dedicated container for the Decap CMS app -->
-  <div id="nc-root"></div>
-
-  <!-- We load the script *after* the container div exists -->
-  <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
-  <script>
-    // This log confirms the script is running
-    console.log("Initializing Decap CMS with embedded config...");
-
-    window.CMS.init({
-      config: {
-        backend: {
-          name: 'github',
-          repo: 'peditx/releases',
-          branch: 'main',
-        },
-        media_folder: "src/assets/images/uploads",
-        public_folder: "/assets/images/uploads",
-        collections: [
-          {
-            name: "releases",
-            label: "Releases",
-            folder: "src/content/releases",
-            create: true,
-            slug: "{{slug}}",
-            fields: [
-              { label: "Title", name: "title", widget: "string" },
-              { label: "Description", name: "description", widget: "string" },
-              { label: "Publish Date", name: "pubDate", widget: "datetime" },
-              { label: "Hero Image", name: "heroImage", widget: "image" },
-              { label: "Script File URL", name: "scriptUrl", widget: "string" },
-              { label: "Body", name: "body", widget: "markdown" },
-            ],
-          },
-        ],
-      },
-    });
-  </script>
 </body>
 </html>
-
