@@ -4,48 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
-
-  <!--
-    STEP 1: Define the configuration object on the window.
-    This MUST happen before the main Decap CMS script is loaded.
-  -->
-  <script>
-    window.CMS_CONFIG = {
-      backend: {
-        name: 'github',
-        repo: 'peditx/releases',
-        branch: 'main',
-      },
-      media_folder: 'src/assets/images/uploads',
-      public_folder: '/assets/images/uploads',
-      collections: [
-        {
-          name: 'releases',
-          label: 'Releases',
-          folder: 'src/content/releases',
-          create: true,
-          slug: '{{slug}}',
-          fields: [
-            { label: 'Title', name: 'title', widget: 'string' },
-            { label: 'Description', name: 'description', widget: 'string' },
-            { label: 'Publish Date', name: 'pubDate', widget: 'datetime' },
-            { label: 'Hero Image', name: 'heroImage', widget: 'image' },
-            { label: 'Script File URL', name: 'scriptUrl', widget: 'string' },
-            { label: 'Body', name: 'body', widget: 'markdown' },
-          ],
-        },
-      ],
-    };
-  </script>
-
-  <!-- 
-    STEP 2: Load the Decap CMS script. It will automatically find 
-    window.CMS_CONFIG and use it, preventing any double-initialization errors.
-  -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <style>
+    /* A simple loader to show that the page is working before the CMS loads */
+    body::before {
+      content: 'Loading Content Manager...';
+      display: block;
+      text-align: center;
+      padding: 40px;
+      font-family: sans-serif;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-  <!-- The CMS will be automatically mounted here by the script -->
+  <!-- This file now only loads the script. The config is in a separate file. -->
 </body>
 </html>
 
