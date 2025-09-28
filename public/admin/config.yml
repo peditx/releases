@@ -1,22 +1,22 @@
 backend:
-  name: github # Use GitHub for authentication
-  repo: peditx/releases # The path to your repository on GitHub
+  name: github
+  repo: peditx/releases # Your repository
   branch: main # The branch to update
 
-media_folder: "src/assets/images/uploads" # Path to store uploaded images
-public_folder: "/assets/images/uploads" # Public path for displaying images
+media_folder: "src/assets/images/uploads" # Media files will be stored in this directory
+public_folder: "/assets/images/uploads" # The src attribute for uploaded media will begin with this path
 
 collections:
-  - name: "releases"
-    label: "Releases"
-    folder: "src/content/releases" # Path to store the markdown files
-    create: true
-    slug: "{{slug}}" # Creates cleaner URLs like /releases/my-post-title
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
-      - { label: "Description", name: "description", widget: "string" }
-      - { label: "Hero Image", name: "heroImage", widget: "image" }
-      - { label: "Script File URL", name: "scriptUrl", widget: "string", hint: "Enter the full raw URL for the script file (e.g., from GitHub Raw)." }
-      - { label: "Body", name: "body", widget: "markdown" }
+  - name: "releases" # Used in routes, e.g., /admin/collections/releases
+    label: "Releases" # Used in the UI
+    folder: "src/content/releases" # The path to the directory where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    fields: # The fields for each document, usually in front matter
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Hero Image", name: "heroImage", widget: "image"}
+      - {label: "Script File URL", name: "scriptUrl", widget: "string"}
+      - {label: "Body", name: "body", widget: "markdown"}
 
