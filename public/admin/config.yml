@@ -5,10 +5,11 @@ backend:
   auth_type: implicit
   app_id: Ov23lifHcrzFtVm5F3Zl
 
-# --- THE FIX IS HERE ---
-# We are changing where images are stored to align with Astro's best practices.
-media_folder: "src/assets/uploads" # Media files will now be stored inside the src folder.
-public_folder: "/src/assets/uploads" # The public URL will also point here now.
+# --- THE FINAL FIX IS HERE ---
+# We are moving images back to the /public folder.
+# This is the standard way to handle static assets that Astro should not process.
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
 
 collections:
   - name: "releases"
@@ -23,3 +24,4 @@ collections:
       - {label: "Hero Image", name: "heroImage", widget: "image"}
       - {label: "Script File URL", name: "scriptUrl", widget: "string"}
       - {label: "Body", name: "body", widget: "markdown"}
+
