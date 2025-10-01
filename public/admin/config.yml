@@ -5,9 +5,6 @@ backend:
   auth_type: implicit
   app_id: Ov23lifHcrzFtVm5F3Zl
 
-# --- THE FINAL FIX IS HERE ---
-# We are moving images back to the /public folder.
-# This is the standard way to handle static assets that Astro should not process.
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
@@ -18,10 +15,19 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Title", name: "title", widget: "string", hint: "The main title of the release."}
+      - {label: "Description", name: "description", widget: "string", hint: "A short summary of the release."}
       - {label: "Publish Date", name: "pubDate", widget: "datetime"}
-      - {label: "Hero Image", name: "heroImage", widget: "image"}
-      - {label: "Script File URL", name: "scriptUrl", widget: "string"}
+      - {label: "Hero Image (Optional)", name: "heroImage", widget: "image", required: false}
+      
+      # This field is now a code editor for pasting script content directly.
+      - label: "Script Content (Optional)"
+        name: "scriptContent"
+        widget: "code"
+        required: false
+        default_language: "shell"
+        allow_language_select: true
+        hint: "Paste the content of your shell script here. This allows for direct editing."
+        
       - {label: "Body", name: "body", widget: "markdown"}
 
