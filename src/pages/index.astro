@@ -1,60 +1,50 @@
 ---
+// DEBUGGING VERSION 1: Just fetching and displaying titles.
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-const posts = (await getCollection('releases')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// We'll try to fetch the posts and catch any errors immediately.
+let posts = [];
+let fetchError = null;
+try {
+  posts = (await getCollection('releases')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+} catch (e) {
+  fetchError = e.message;
+}
 ---
 
-<Layout title={SITE_TITLE}>
-    <div class="container mx-auto max-w-6xl px-4 py-12 sm:py-16 lg:py-20">
-        
-        <header class="text-center mb-16 relative z-10">
-            <h1 class="text-4xl md:text-6xl font-bold font-orbitron text-neon-cyan tracking-widest uppercase mb-4 animate-pulse">{SITE_TITLE}</h1>
-            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
-        </header>
+<Layout title="Debugging Mode">
+  <div class="container mx-auto max-w-4xl px-4 py-12 text-white relative z-10">
+    <header class="text-center mb-12">
+        <h1 class="text-4xl font-orbitron text-neon-magenta">SITE DEBUGGING MODE</h1>
+        <p class="mt-4 text-gray-400">This is a test to see if we can fetch content without crashing the build.</p>
+    </header>
 
-        <main class="grid gap-8 md:gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
-            {posts.map(post => (
-                <a href={`/releases/${post.slug}/`} class="cyber-card group block overflow-hidden">
-                    
-                    {/* THE FINAL FIX IS HERE: 
-                        We are using the RENAMED field `coverImage` to avoid the Astro cache bug.
-                    */}
-                    {post.data.coverImage && (
-                        <img 
-                            src={post.data.coverImage} 
-                            alt={`Cover image for ${post.data.title}`} 
-                            width="720"
-                            height="360"
-                            loading="lazy"
-                            class="w-full h-48 object-cover group-hover:opacity-75 transition-opacity duration-300"
-                        />
-                    )}
+    <main class="bg-black/50 border border-[var(--border-color)] p-8">
+        {fetchError && (
+            <div class="border border-red-500 bg-red-900/50 p-4 mb-8">
+                <h2 class="text-2xl font-bold text-red-400">An error occurred while fetching posts:</h2>
+                <pre class="mt-4 whitespace-pre-wrap font-mono text-sm"><code>{fetchError}</code></pre>
+            </div>
+        )}
 
-                    <div class="p-6">
-                        <p class="text-sm text-gray-400 mb-2">
-                             {new Date(post.data.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                        </p>
-                        <h2 class="text-xl font-bold font-orbitron text-white mb-3 group-hover:text-neon-cyan transition-colors duration-300">
-                            {post.data.title}
-                        </h2>
-                        <p class="text-gray-300 leading-relaxed line-clamp-3">
-                            {post.data.description}
-                        </p>
-                    </div>
-                </a>
-            ))}
-            {posts.length === 0 && (
-                <div class="md:col-span-2 lg:col-span-3 text-center py-16 command-box rounded-lg">
-                    <p class="text-lg">&gt; System.log: No release entries found.</p>
-                    <p class="text-lg">&gt; Action: Use admin panel to deploy new entries.</p>
-                </div>
-            )}
-        </main>
+        <h2 class="text-2xl font-bold font-orbitron text-neon-cyan mb-4">Found {posts.length} Posts:</h2>
         
-    </div>
+        {posts.length > 0 ? (
+            <ul class="list-disc pl-5 space-y-2">
+                {posts.map(post => (
+                    <li>
+                        <strong class="text-white">{post.data.title}</strong>
+                        <span class="text-gray-500 ml-2">(Slug: {post.slug})</span>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p class="text-gray-500">No posts were found. If this message appears without an error above, it means the build was successful!</p>
+        )}
+    </main>
+  </div>
 </Layout>
 
