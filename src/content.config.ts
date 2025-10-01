@@ -1,19 +1,23 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
 
-const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-	// Type-check frontmatter using a schema
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: image().optional(),
-		}),
+// 1. We define a new collection called "releases"
+const releasesCollection = defineCollection({
+	type: 'content', // It contains markdown files
+	
+    // 2. We define the schema to match the fields in your Decap CMS config.yml
+	schema: ({ image }) => z.object({
+		title: z.string(),
+		description: z.string(),
+		// This transforms the date string from the markdown file into a proper Date object
+		pubDate: z.coerce.date(),
+		// This tells Astro to expect an image path and helps optimize it
+		heroImage: image().optional(), 
+		scriptUrl: z.string().optional(),
+	}),
 });
 
-export const collections = { blog };
+// 3. We export the "releases" collection so the rest of your site can use it.
+export const collections = {
+  'releases': releasesCollection,
+};
+
