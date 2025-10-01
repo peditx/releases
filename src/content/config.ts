@@ -1,20 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineConfig } from 'astro/config';
 
-const releasesCollection = defineCollection({
-	type: 'content',
-	// We define the schema with the RENAMED field
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		pubDate: z.coerce.date(),
-		// RENAMED from heroImage to coverImage
-		coverImage: z.string().optional(), 
-		scriptUrl: z.string().optional(),
-		scriptContent: z.string().optional(),
-	}),
+// https://astro.build/config
+// We are removing ALL integrations (mdx, sitemap) for this test.
+export default defineConfig({
+  site: 'https://codes.peditxos.ir',
+  output: 'static',
 });
-
-export const collections = {
-  'releases': releasesCollection,
-};
 
