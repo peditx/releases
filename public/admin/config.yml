@@ -1,25 +1,25 @@
 backend:
   name: github
-  repo: peditx/releases # IMPORTANT: Your GitHub username and repository name
-  branch: main # The branch to update
-  auth_type: implicit # Use implicit auth flow
-  app_id: Ov23lifHcrzFtVm5F3Zl # Your GitHub OAuth App Client ID
+  repo: peditx/releases
+  branch: main
+  auth_type: implicit
+  app_id: Ov23lifHcrzFtVm5F3Zl
 
-# Corrected paths for media files
-media_folder: "public/images/uploads" # Media files will be stored in this directory
-public_folder: "/images/uploads"     # The public URL for the media files will start with this path
+# --- THE FIX IS HERE ---
+# We are changing where images are stored to align with Astro's best practices.
+media_folder: "src/assets/uploads" # Media files will now be stored inside the src folder.
+public_folder: "/src/assets/uploads" # The public URL will also point here now.
 
 collections:
-  - name: "releases" # Used in routes, e.g., /releases/post-slug
-    label: "Releases" # Used in the UI
-    folder: "src/content/releases" # The path to the folder where the documents are stored
-    create: true # Allow users to create new documents in this collection
-    slug: "{{slug}}" # Filename template, e.g., title.md
-    fields: # The fields for each document, usually in frontmatter
+  - name: "releases"
+    label: "Releases"
+    folder: "src/content/releases"
+    create: true
+    slug: "{{slug}}"
+    fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Description", name: "description", widget: "string"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime"}
       - {label: "Hero Image", name: "heroImage", widget: "image"}
       - {label: "Script File URL", name: "scriptUrl", widget: "string"}
       - {label: "Body", name: "body", widget: "markdown"}
-
