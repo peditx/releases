@@ -11,11 +11,8 @@ export async function getStaticPaths() {
 }
 
 type Props = CollectionEntry<'releases'>;
-
 const post = Astro.props;
 const { Content } = await post.render();
-
-// We directly use the scriptContent from the post data.
 const scriptContent = post.data.scriptContent;
 ---
 <Layout title={post.data.title}>
@@ -28,10 +25,13 @@ const scriptContent = post.data.scriptContent;
 				</p>
 			</header>
 
-			<!-- FIX: Replaced Astro's <Image> component with a standard <img> tag to avoid build issues with /public folder assets. -->
-			{post.data.heroImage && (
+			<!-- 
+                THE FINAL, CORRECTED FIX: 
+                The image source now correctly points to `post.data.coverImage`.
+            -->
+			{post.data.coverImage && (
 				<img
-					src={post.data.heroImage}
+					src={post.data.coverImage}
 					alt={`Cover for ${post.data.title}`}
 					width={1200}
 					height={600}
@@ -39,11 +39,10 @@ const scriptContent = post.data.scriptContent;
 				/>
 			)}
 			
-			<div class="prose prose-invert prose-lg max-w-none text-gray-300 prose-headings:text-neon-magenta prose-headings:font-orbitron prose-a:text-neon-cyan hover:prose-a:text-neon-magenta">
+			<div class="prose prose-invert prose-lg max-w-none text-gray-300">
 				<Content />
 			</div>
 
-			<!-- This entire section will only render if scriptContent has a value. -->
 			{scriptContent && (
 				<div class="mt-12">
 					<h3 class="text-2xl font-orbitron text-neon-magenta mb-4">Script</h3>
@@ -60,11 +59,9 @@ const scriptContent = post.data.scriptContent;
 </Layout>
 
 <script define:vars={{ scriptContent }}>
-	// This script only runs if the scriptContent exists, because the elements won't exist otherwise.
 	if (scriptContent) {
 		const copyButton = document.getElementById('copy-button');
 		copyButton.addEventListener('click', () => {
-			// Use document.execCommand as a fallback for broader browser compatibility in iframes.
 			const textArea = document.createElement('textarea');
 			textArea.value = scriptContent;
 			document.body.appendChild(textArea);
@@ -78,7 +75,6 @@ const scriptContent = post.data.scriptContent;
 				copyButton.setAttribute('title', 'Error!');
 			}
 			document.body.removeChild(textArea);
-
 			setTimeout(() => {
 				copyButton.innerHTML = '<i class="fas fa-copy"></i>';
 				copyButton.setAttribute('title', 'Copy Script');
@@ -86,7 +82,6 @@ const scriptContent = post.data.scriptContent;
 		});
 	}
 </script>
-
 <style is:global>
 .prose h1, .prose h2, .prose h3 { margin-bottom: 0.5em; }
 .prose p { margin-bottom: 1em; line-height: 1.7; }
