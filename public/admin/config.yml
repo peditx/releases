@@ -15,12 +15,14 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string", hint: "The main title of the release."}
-      - {label: "Description", name: "description", widget: "string", hint: "A short summary of the release."}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "string"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime"}
-      - {label: "Hero Image (Optional)", name: "heroImage", widget: "image", required: false}
       
-      # This field is now a code editor for pasting script content directly.
+      # RENAMED from heroImage to coverImage to bust the Astro build cache
+      - {label: "Cover Image (Optional)", name: "coverImage", widget: "image", required: false}
+      
+      # FIX: Restored the detailed code editor widget for scriptContent
       - label: "Script Content (Optional)"
         name: "scriptContent"
         widget: "code"
