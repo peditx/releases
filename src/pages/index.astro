@@ -1,57 +1,58 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro'; // FIX: Re-importing your project's layout
+import Layout from '../layouts/Layout.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Fetch all posts from the "releases" collection, sorted by date.
 const posts = (await getCollection('releases')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
-<!-- 
-  FIX: We are now using your existing Layout component.
-  This ensures that all your project's styles are applied correctly.
--->
-<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-    <!-- Using a container to center content and add padding, just like before -->
-    <div class="container mx-auto max-w-5xl px-4 py-8 sm:py-12 lg:py-16">
+<Layout title={SITE_TITLE}>
+    <div class="container mx-auto max-w-6xl px-4 py-12 sm:py-16 lg:py-20">
         
-        <!-- Page Header, identical to the previous version -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">{SITE_TITLE}</h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
+        <header class="text-center mb-16 relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold font-orbitron text-neon-cyan tracking-widest uppercase mb-4 animate-pulse">{SITE_TITLE}</h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
         </header>
 
-        <!-- The main grid for displaying release posts -->
-        <main class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <main class="grid gap-8 md:gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
             {posts.map(post => (
-                <a 
-                    href={`/releases/${post.slug}/`} 
-                    class="group block bg-gray-800/50 border border-gray-700 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-900/50 hover:-translate-y-2"
-                >
-                    <img 
-                        src={post.data.heroImage} 
-                        alt={`Hero image for ${post.data.title}`} 
-                        class="w-full h-48 object-cover"
-                        onerror="this.style.display='none'"
-                    />
+                <a href={`/releases/${post.slug}/`} class="cyber-card group block overflow-hidden">
+                    
+                    <!-- 
+                        THE FINAL FIX IS HERE: 
+                        Replaced Astro's <Image> component with a standard <img> tag.
+                        This prevents the build from crashing when a post and its image are deleted.
+                    -->
+                    {post.data.heroImage && (
+                        <img 
+                            src={post.data.heroImage} 
+                            alt={`Hero image for ${post.data.title}`} 
+                            width="720"
+                            height="360"
+                            loading="lazy"
+                            class="w-full h-48 object-cover group-hover:opacity-75 transition-opacity duration-300"
+                        />
+                    )}
+
                     <div class="p-6">
                         <p class="text-sm text-gray-400 mb-2">
-                            {new Date(post.data.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                             {new Date(post.data.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </p>
-                        <h2 class="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                        <h2 class="text-xl font-bold font-orbitron text-white mb-3 group-hover:text-neon-cyan transition-colors duration-300">
                             {post.data.title}
                         </h2>
-                        <p class="text-gray-400 leading-relaxed line-clamp-3">
+                        <p class="text-gray-300 leading-relaxed line-clamp-3">
                             {post.data.description}
                         </p>
                     </div>
                 </a>
             ))}
             {posts.length === 0 && (
-                <div class="md:col-span-2 lg:col-span-3 text-center py-16">
-                    <p class="text-gray-500">No posts found yet. Add one from the admin panel!</p>
+                <div class="md:col-span-2 lg:col-span-3 text-center py-16 command-box rounded-lg">
+                    <p class="text-lg">&gt; System.log: No release entries found.</p>
+                    <p class="text-lg">&gt; Action: Use admin panel to deploy new entries.</p>
                 </div>
             )}
         </main>
