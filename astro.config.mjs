@@ -1,14 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineConfig } from 'astro/config';
 
-const releasesCollection = defineCollection({
-	type: 'content',
-	// We are simplifying the schema to the absolute minimum for this test.
-	schema: z.object({
-		title: z.string(),
-	}),
+// https://astro.build/config
+// This version is clean and does NOT import 'astro:content', which fixes the build error.
+export default defineConfig({
+  site: 'https://codes.peditxos.ir',
+  output: 'static',
 });
-
-export const collections = {
-  'releases': releasesCollection,
-};
 
