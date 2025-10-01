@@ -1,60 +1,35 @@
 ---
-// We import what we need: Layout component, content collection helper, and site constants.
 import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro'; // FIX: Re-importing your project's layout
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Fetch all posts from the "releases" collection, same as before.
+// Fetch all posts from the "releases" collection, sorted by date.
 const posts = (await getCollection('releases')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <!-- 
-  This is a full-page component. It uses the SITE_TITLE and SITE_DESCRIPTION
-  from your consts.ts file to set the page metadata.
+  FIX: We are now using your existing Layout component.
+  This ensures that all your project's styles are applied correctly.
 -->
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{SITE_TITLE}</title>
-    <meta name="description" content={SITE_DESCRIPTION} />
-    
-    <!-- Using Tailwind CSS via CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Using the Inter font family from Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-    </style>
-</head>
-<body class="bg-gray-900 text-gray-300 antialiased">
-
+<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+    <!-- Using a container to center content and add padding, just like before -->
     <div class="container mx-auto max-w-5xl px-4 py-8 sm:py-12 lg:py-16">
         
-        <!-- Page Header using your site constants -->
+        <!-- Page Header, identical to the previous version -->
         <header class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">{SITE_TITLE}</h1>
             <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
         </header>
 
-        <!-- The grid layout for your latest posts -->
+        <!-- The main grid for displaying release posts -->
         <main class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {posts.map(post => (
                 <a 
                     href={`/releases/${post.slug}/`} 
                     class="group block bg-gray-800/50 border border-gray-700 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-900/50 hover:-translate-y-2"
                 >
-                    <!-- Added the heroImage from your original code -->
                     <img 
                         src={post.data.heroImage} 
                         alt={`Hero image for ${post.data.title}`} 
@@ -75,10 +50,12 @@ const posts = (await getCollection('releases')).sort(
                 </a>
             ))}
             {posts.length === 0 && (
-                <p class="text-center text-gray-500 md:col-span-2 lg:col-span-3">No posts found yet. Add one from the admin panel!</p>
+                <div class="md:col-span-2 lg:col-span-3 text-center py-16">
+                    <p class="text-gray-500">No posts found yet. Add one from the admin panel!</p>
+                </div>
             )}
         </main>
         
     </div>
-</body>
-</html>
+</Layout>
+
