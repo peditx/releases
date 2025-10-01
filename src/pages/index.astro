@@ -20,15 +20,13 @@ const posts = (await getCollection('releases')).sort(
             {posts.map(post => (
                 <a href={`/releases/${post.slug}/`} class="cyber-card group block overflow-hidden">
                     
-                    <!-- 
-                        THE FINAL FIX IS HERE: 
-                        Replaced Astro's <Image> component with a standard <img> tag.
-                        This prevents the build from crashing when a post and its image are deleted.
-                    -->
-                    {post.data.heroImage && (
+                    {/* THE FINAL FIX IS HERE: 
+                        We are using the RENAMED field `coverImage` to avoid the Astro cache bug.
+                    */}
+                    {post.data.coverImage && (
                         <img 
-                            src={post.data.heroImage} 
-                            alt={`Hero image for ${post.data.title}`} 
+                            src={post.data.coverImage} 
+                            alt={`Cover image for ${post.data.title}`} 
                             width="720"
                             height="360"
                             loading="lazy"
